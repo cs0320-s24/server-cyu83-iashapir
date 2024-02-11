@@ -16,9 +16,9 @@ public class Server {
 				});
 
 		// set up handlers for endpoints
-		Spark.get("loadcsv", new LoadCSVHandler());
-		Spark.get("viewcsv", new ViewCSVHandler());
-		Spark.get("searchcsv", new SearchCSVHandler());
+		Spark.get("loadcsv", new LoadCSVHandler(null));
+		Spark.get("viewcsv", new ViewCSVHandler(null));
+		Spark.get("searchcsv", new SearchCSVHandler(null));
 		Spark.get("broadband", new BroadbandHandler());
 		Spark.init();
 		Spark.awaitInitialization();
