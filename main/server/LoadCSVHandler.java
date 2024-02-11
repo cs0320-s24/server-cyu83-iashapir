@@ -1,6 +1,9 @@
+package server;
+
 import spark.Request;
 import spark.Response;
 import spark.Route;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +16,6 @@ public class LoadCSVHandler implements Route {
 		// get query params for CSV filepath to load
 		String filepath = request.queryParams("participants");
 
-
+		return null;
 	}
 }

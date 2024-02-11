@@ -1,3 +1,5 @@
+package server;
+
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -9,6 +11,6 @@ public class BroadbandHandler implements Route {
 		String state = request.queryParams("state");
 		String county = request.queryParams("county");
 
-
+		return null;
 	}
 }

@@ -1,4 +1,4 @@
-package main.server;
+package server;
 
 import spark.Request;
 import spark.Response;
@@ -10,5 +10,6 @@ public class SearchCSVHandler implements Route {
 
 		String searchVal = request.queryParams("searchVal");
 		// TODO: add all other params needed to perform search
+		return null;
 	}
 }
