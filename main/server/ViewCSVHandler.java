@@ -1,13 +1,13 @@
 package server;
 
-import csv.CsvDataSource;
+import csv.CSVDataSource;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
 public class ViewCSVHandler implements Route {
-	private final CsvDataSource dataSource;
-	public ViewCSVHandler(CsvDataSource dataSource){
+	private final CSVDataSource dataSource;
+	public ViewCSVHandler(CSVDataSource dataSource){
 		this.dataSource = dataSource;
 	}
 	@Override

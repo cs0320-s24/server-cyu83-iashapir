@@ -18,38 +18,21 @@ import java.util.regex.Pattern;
  * <p>- this class SHOULD deal with headers because you don't want to end up with a Person class
  * that stores rows as Name: Name, Value: Value
  */
-public class CSVParser<T> implements Iterable<T>{
+public class CSVParser{
 
   static final Pattern regexSplitCSVRow =
       Pattern.compile(",(?=([^\\\"]*\\\"[^\\\"]*\\\")*(?![^\\\"]*\\\"))");
   private Reader reader;
-  private CreatorFromRow<T> creator;
   private Boolean hasHeader;
   private String[] headerCol;
 
   /**
    * @param reader passed in from Searcher class i guess
-   * @param creator CreatorFromRow object that we call create on
    * @param hasHeader indicates whether the data has a header column
    */
-  public CSVParser(Reader reader, CreatorFromRow<T> creator, Boolean hasHeader) {
+  public CSVParser(Reader reader, Boolean hasHeader) {
     this.reader = reader;
-    this.creator = creator;
     this.hasHeader = hasHeader;
-  }
-
-  @Override
-  public Iterator<T> iterator(){
-    try{
-      return this.parse().iterator();
-    }
-    catch(FactoryFailureException f){
-
-    }
-    catch(IOException e){
-
-    }
-    return null;
   }
 
   /**
@@ -58,11 +41,11 @@ public class CSVParser<T> implements Iterable<T>{
    *
    * @return parser can just throw FactoryFailure too
    */
-  public List<T> parse() throws IOException, FactoryFailureException {
+  public List<List<String>> parse() throws IOException{
 
     String line;
     BufferedReader bReader = new BufferedReader(reader);
-    List<T> dataset = new ArrayList<T>();
+    List<List<String>> dataset = new ArrayList<List<String>>();
 
     // if there is a header, parse first row into separate data structure
     if (this.hasHeader) {
@@ -75,8 +58,7 @@ public class CSVParser<T> implements Iterable<T>{
     while (line != null) {
       String[] result = this.regexSplitCSVRow.split(line);
       // this adds each T to our internal dataset -> might throw FF Exception
-      T row = this.creator.create(Arrays.asList(result));
-      dataset.add(row);
+      dataset.add(Arrays.asList(result));
       line = bReader.readLine();
     }
 

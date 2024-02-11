@@ -1,13 +1,13 @@
 package server;
 
-import csv.CsvDataSource;
+import csv.CSVDataSource;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
 public class SearchCSVHandler implements Route {
-	private final CsvDataSource dataSource;
-	public SearchCSVHandler(CsvDataSource dataSource){
+	private final CSVDataSource dataSource;
+	public SearchCSVHandler(CSVDataSource dataSource){
 		this.dataSource = dataSource;
 	}
 	@Override

@@ -12,7 +12,7 @@ import java.util.List;
 public class Searcher {
 
   private HashMap<String, Integer> colsToIndex;
-  private CSVParser<List<String>> parser;
+  private CSVParser parser;
   private List<List<String>> dataset;
   private Boolean hasHeader;
   private HashSet<Integer> rowMatchInts;
