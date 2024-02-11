@@ -1,12 +1,16 @@
 package server;
 import static spark.Spark.after;
+
+import csv.CSVDataSource;
 import spark.Spark;
 
 
 public class Server {
+
 	public static void main(String[] args) {
 		int port = 3232;
 		Spark.port(port);
+		CSVDataSource csvDatasource = new CSVDataSource();
 
 		// set up - allow clients to make requests to server
 		after(
@@ -16,9 +20,9 @@ public class Server {
 				});
 
 		// set up handlers for endpoints
-		Spark.get("loadcsv", new LoadCSVHandler());
-		Spark.get("viewcsv", new ViewCSVHandler());
-		Spark.get("searchcsv", new SearchCSVHandler());
+		Spark.get("loadcsv", new LoadCSVHandler(csvDatasource));
+		Spark.get("viewcsv", new ViewCSVHandler(null));
+		Spark.get("searchcsv", new SearchCSVHandler(null));
 		Spark.get("broadband", new BroadbandHandler());
 		Spark.init();
 		Spark.awaitInitialization();
