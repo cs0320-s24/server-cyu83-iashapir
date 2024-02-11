@@ -61,6 +61,9 @@ public class LoadCSVHandler implements Route {
 			FileReader reader = new FileReader(filepath);
 			CSVParser parser = new CSVParser(reader, this.dataSource.getHasHeader());
 			this.dataSource.setDataset(parser.parse());
+			if(this.dataSource.getHasHeader()) {
+				this.dataSource.setHeaderCol(parser.getHeaderCol());
+			}
 		}
 		catch(IOException e){
 			responseMap.put("Message", "Something went wrong while reading your file.");

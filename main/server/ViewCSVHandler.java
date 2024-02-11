@@ -25,6 +25,7 @@ public class ViewCSVHandler implements Route {
 			return new CSVFailureResponse(responseMap).serialize();
 		}
 
+		response.type("application/json");
 		responseMap.put("Data",dataSource.getDataset());
 		return new CSVSuccessResponse(responseMap).serialize();
 

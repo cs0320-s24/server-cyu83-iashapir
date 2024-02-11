@@ -8,6 +8,7 @@ public class CSVDataSource {
   private String filepath;
   private boolean hasHeader;
   private boolean loaded;
+  private String[] headerCol;
 
   public CSVDataSource(){
     this.loaded = false;
@@ -39,6 +40,13 @@ public class CSVDataSource {
   }
   public boolean isLoaded() {
     return this.loaded;
+  }
+  public void setHeaderCol(String[] header){
+    this.headerCol = header;
+  }
+
+  public String[] getHeaderCol(){
+    return this.headerCol;
   }
 
 }
