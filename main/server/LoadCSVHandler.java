@@ -35,12 +35,9 @@ public class LoadCSVHandler implements Route {
 	 */
 	@Override
 	public Object handle(Request request, Response response){
-		System.out.println("entered handle");
 		// get query params for CSV filepath to load
 		String filepath = "data/" + request.queryParams("filepath");
-		System.out.println("filepath " + filepath);
 		String hasHeader = request.queryParams("hasHeader");
-		System.out.println("hasHeader " + hasHeader);
 		Map<String, Object> responseMap = new HashMap<>();
 
 		if (this.checkYesOrNo(hasHeader) == 2) {
@@ -49,7 +46,6 @@ public class LoadCSVHandler implements Route {
 			return new CSVFailureResponse(responseMap).serialize();
 
 		} else if (this.checkYesOrNo(hasHeader) == 1) {
-			System.out.println("checked hasHeader and returning true");
 			this.dataSource.setHasHeader(true);
 		} else {
 			this.dataSource.setHasHeader(false);
@@ -62,7 +58,6 @@ public class LoadCSVHandler implements Route {
 		}
 
 		try {
-			System.out.println("parsing data");
 			FileReader reader = new FileReader(filepath);
 			CSVParser parser = new CSVParser(reader, this.dataSource.getHasHeader());
 			this.dataSource.setDataset(parser.parse());
@@ -73,7 +68,6 @@ public class LoadCSVHandler implements Route {
 		}
 
 		responseMap.put("Message", "Successfully loaded file: "+filepath);
-		System.out.println("ResponseMap " + responseMap);
 		return new CSVSuccessResponse(responseMap).serialize();
 
 	}

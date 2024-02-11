@@ -7,9 +7,10 @@ public class CSVDataSource {
   private List<List<String>> dataset;
   private String filepath;
   private boolean hasHeader;
+  private boolean loaded;
 
   public CSVDataSource(){
-
+    this.loaded = false;
   }
 
   /**
@@ -30,10 +31,14 @@ public class CSVDataSource {
 
   public void setDataset(List<List<String>> data){
     this.dataset = data;
+    this.loaded = true;
   }
 
   public boolean getHasHeader(){
     return this.hasHeader;
+  }
+  public boolean isLoaded() {
+    return this.loaded;
   }
 
 }
