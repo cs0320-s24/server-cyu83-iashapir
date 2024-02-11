@@ -1,3 +1,8 @@
+package main.server;
+import static spark.Spark.after;
+import spark.Spark;
+
+
 public class Server {
 	public static void main(String[] args) {
 		int port = 3232;
@@ -10,13 +15,11 @@ public class Server {
 					response.header("Access-Control-Allow-Methods", "*");
 				});
 
-		String CSVfilepath; // TODO - provide the filepath
-
 		// set up handlers for endpoints
-		Spark.get("loadcsv", new _Handler(CSVfilepath));
-		Spark.get("viewcsv", new _Handler());
-		Spark.get("searchcsv", new _Handler());
-		Spark.get("broadband", new _Handler());
+		Spark.get("loadcsv", new LoadCSVHandler());
+		Spark.get("viewcsv", new ViewCSVHandler());
+		Spark.get("searchcsv", new SearchCSVHandler());
+		Spark.get("broadband", new BroadbandHandler());
 		Spark.init();
 		Spark.awaitInitialization();
 
