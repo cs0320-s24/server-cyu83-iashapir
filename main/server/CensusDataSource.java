@@ -29,10 +29,38 @@ import java.util.Map;
  */
 public class CensusDataSource {
 
-  private Map<String, Object> stateCodes;
+//  private Map<String, Object> stateCodes;
   private List<List<String>> listStateCodes;
+  private List<List<String>> countyCodes;
 
 
+  public String getData(String stateName, String countyName) throws DatasourceException {
+      String stateCode = this.findStateCode(stateName);
+      String countyCode = this.findCountyCode(stateCode, countyName);
+
+      try {
+          // build request to get broadband data from census api for given state and county
+          URL requestURL = new URL("https","api.census.gov",
+                  "/data/2021/acs/acs1/subject/variables?get=NAME,S2802_C03_022E&for=county:"+countyCode+"&in=state:"+stateCode);
+          HttpURLConnection clientConnection = connect(requestURL);
+          Moshi moshi = new Moshi.Builder().build();
+          Type listListString = Types.newParameterizedType(List.class, List.class, String.class);
+          JsonAdapter<List<List<String>>> adapter = moshi.adapter(listListString);
+
+          List<List<String>> body = adapter.fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
+
+          clientConnection.disconnect();
+
+          // validity checks for response
+          if (body == null || body.size() != 2 || body.get(0).size() != 4) {
+              throw new DatasourceException("Malformed response from Census API");
+          }
+
+          return body.get(1).get(1); // get broadband data
+      } catch (IOException e) {
+          throw new DatasourceException(e.getMessage(), e);
+      }
+  }
 
   /**
    * Method to find the stateCode given a state name
@@ -42,9 +70,9 @@ public class CensusDataSource {
    * Throw all exceptions because we want to handle them in the handler!
    * @return
    */
-  public Object findStateCode(String stateName) throws DatasourceException{
+  public String findStateCode(String stateName) throws DatasourceException{
     System.out.println("find state codes called");
-    if(this.stateCodes==null){
+    if(this.listStateCodes==null){
       try{
         this.requestStateCodes();
       }
@@ -55,14 +83,79 @@ public class CensusDataSource {
     }
     try{
       System.out.println("trying to get stateName from hashmap");
-      return this.stateCodes.get(stateName);
+      for (int i = 1; i < listStateCodes.size(); i++) {
+          if (listStateCodes.get(i).get(0).equals(stateName)) {
+              return listStateCodes.get(i).get(1);
+          }
+      }
+      throw new DatasourceException("State name was not found!");
     }
     /**TODO: figure out a better way to do this, rn all exception caught here?*/
     catch(Exception e){
       throw new DatasourceException(e.getMessage());
     }
-
   }
+
+    /**
+     * Method to find the countyCode given a county name
+     * @return
+     */
+    public String findCountyCode(String stateCode, String countyName) throws DatasourceException{
+        if(this.countyCodes==null || !this.countyCodes.get(1).get(2).equals(stateCode)) { // countyCodes saved but not the right state
+            try {
+                this.requestCountyCodes(stateCode);
+            } catch (IOException e) {
+                System.out.println("caught IO exception from request");
+                throw new DatasourceException(e.getMessage());
+            }
+        }
+        try{
+            System.out.println("trying to get stateName from hashmap");
+            for (int i = 1; i < countyCodes.size(); i++) {
+                String countyAndState = countyCodes.get(i).get(0);
+                if (countyAndState.substring(0, countyAndState.indexOf(",")).equals(countyName)) { // parse string "county, state" to just county
+                    return countyCodes.get(i).get(2);
+                }
+            }
+            throw new DatasourceException("County name was not found!");
+        }
+        /**TODO: figure out a better way to do this, rn all exception caught here?*/
+        catch(Exception e){
+            throw new DatasourceException(e.getMessage());
+        }
+    }
+
+    /**
+     * requests countyCodes from census
+     * calls deserialize to turn them into hashmap
+     * stores that hashmap as instance variable
+     * @return
+     * @throws URISyntaxException
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    private void requestCountyCodes(String stateCode) throws IOException, DatasourceException {
+        //builds request to census for state code data
+        URL requestURL =
+                new URL("https", "api.census.gov", "/data/2010/dec/sf1?get=NAME&for=county:*&in=state:"+stateCode);
+        HttpURLConnection clientConnection = connect(requestURL);
+        Moshi moshi = new Moshi.Builder().build();
+        Type listListString = Types.newParameterizedType(List.class, List.class, String.class);
+        JsonAdapter<List<List<String>>> adapter = moshi.adapter(listListString);
+        try {
+            List<List<String>> body =
+                    adapter.fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
+            clientConnection.disconnect();
+            if (body == null) {
+                throw new DatasourceException("Malformed response from Census API");
+            }
+            //this.stateCodes = body;
+            System.out.println(body);
+            this.countyCodes = body;
+        } catch (Exception e) { //changed to Exception for debugging
+            System.out.println(e.getMessage());
+        }
+    }
 
   /**
    * requests stateCodes from census
