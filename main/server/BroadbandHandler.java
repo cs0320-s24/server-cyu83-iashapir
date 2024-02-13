@@ -35,13 +35,17 @@ public class BroadbandHandler implements Route {
 		Map<String, Object> responseMap = new HashMap<>();
 
 		//get query params for state and county requests
-		String stateIn = request.queryParams("state");
-		//String county = request.queryParams("county");
+		String stateName = request.queryParams("state");
+		String countyName = request.queryParams("county");
 
 		try{
-			Object stateCode = state.findStateCode(stateIn);
+			String stateCode = state.findStateCode(stateName);
+			String countyCode = state.findCountyCode(stateCode, countyName);
+			String data = state.getData(stateName, countyName);
 			responseMap.put("type", "success");
 			responseMap.put("stateCode", stateCode);
+			responseMap.put("countyCode", countyCode);
+			responseMap.put("broadband data", data);
 			return adapter.toJson(responseMap);
 		}
 		catch(DatasourceException e){
