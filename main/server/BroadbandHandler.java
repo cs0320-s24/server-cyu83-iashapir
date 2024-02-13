@@ -42,16 +42,21 @@ public class BroadbandHandler implements Route {
 			String stateCode = state.findStateCode(stateName);
 			String countyCode = state.findCountyCode(stateCode, countyName);
 			String data = state.getData(stateName, countyName);
-			responseMap.put("type", "success");
+			responseMap.put("result", "success");
 			responseMap.put("stateCode", stateCode);
 			responseMap.put("countyCode", countyCode);
+			responseMap.put("state name", stateName);
+			responseMap.put("county name", countyName);
 			responseMap.put("broadband data", data);
 			return adapter.toJson(responseMap);
 		}
 		catch(DatasourceException e){
 			responseMap.put("type", "error");
-			responseMap.put("message", e.getMessage());
+			responseMap.put("result", e.getMessage());
 			return adapter.toJson(responseMap);
 		}
+//		catch (IllegalArgumentException e) {
+//
+//		}
 	}
 }
