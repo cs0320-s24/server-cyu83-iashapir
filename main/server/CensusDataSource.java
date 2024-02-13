@@ -19,6 +19,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /***
@@ -29,6 +30,7 @@ import java.util.Map;
 public class CensusDataSource {
 
   private Map<String, Object> stateCodes;
+  private List<List<String>> listStateCodes;
 
 
 
@@ -80,12 +82,12 @@ public class CensusDataSource {
       System.out.println("connected to client");
       Moshi moshi = new Moshi.Builder().build();
       System.out.println("built moshi");
-      Type mapStringObject = Types.newParameterizedType(Map.class, String.class, Object.class);
+      Type listListString = Types.newParameterizedType(List.class, List.class, String.class);
       System.out.println("making the type");
-      JsonAdapter<Map<String, Object>> adapter = moshi.adapter(mapStringObject);
+      JsonAdapter<List<List<String>>> adapter = moshi.adapter(listListString);
       System.out.println("made adapter");
       try {
-        Map<String, Object> body =
+        List<List<String>> body =
             adapter.fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
         System.out.println("got body of request using adapter");
         clientConnection.disconnect();
@@ -94,8 +96,10 @@ public class CensusDataSource {
           System.out.println("body was null");
           throw new DatasourceException("Malformed response from Census API");
         }
-        this.stateCodes = body;
-      } catch (IOException e) {
+        //this.stateCodes = body;
+        System.out.println(body);
+        this.listStateCodes = body;
+      } catch (Exception e) { //changed to Exception for debugging
         System.out.println(e.getMessage());
       }
 //      System.out.println("got body of request using adapter");
