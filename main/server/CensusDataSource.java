@@ -44,7 +44,7 @@ public class CensusDataSource {
    */
   public Object findStateCode(String stateName) throws DatasourceException{
     System.out.println("find state codes called");
-    if(this.stateCodes==null){
+    if(this.listStateCodes==null){
       try{
         this.requestStateCodes();
       }
@@ -55,7 +55,12 @@ public class CensusDataSource {
     }
     try{
       System.out.println("trying to get stateName from hashmap");
-      return this.stateCodes.get(stateName);
+      for (int i = 0; i < listStateCodes.size(); i++) {
+          if (listStateCodes.get(i).get(0).equals(stateName)) {
+              return listStateCodes.get(i).get(1);
+          }
+      }
+      throw new DatasourceException("State name was not found!");
     }
     /**TODO: figure out a better way to do this, rn all exception caught here?*/
     catch(Exception e){
