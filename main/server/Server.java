@@ -23,7 +23,7 @@ public class Server {
 		Spark.get("loadcsv", new LoadCSVHandler(csvDatasource));
 		Spark.get("viewcsv", new ViewCSVHandler(csvDatasource));
 		Spark.get("searchcsv", new SearchCSVHandler(csvDatasource));
-		Spark.get("broadband", new BroadbandHandler());
+		Spark.get("broadband", new BroadbandHandler(new CensusDataSource()));
 		Spark.init();
 		Spark.awaitInitialization();
 
