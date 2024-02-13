@@ -39,12 +39,12 @@ public class BroadbandHandler implements Route {
 		String countyName = request.queryParams("county");
 
 		try{
-			String stateCode = state.findStateCode(stateName);
-			String countyCode = state.findCountyCode(stateCode, countyName);
+//			String stateCode = state.findStateCode(stateName);
+//			String countyCode = state.findCountyCode(stateCode, countyName);
 			String data = state.getData(stateName, countyName);
 			responseMap.put("result", "success");
-			responseMap.put("stateCode", stateCode);
-			responseMap.put("countyCode", countyCode);
+//			responseMap.put("stateCode", stateCode);
+//			responseMap.put("countyCode", countyCode);
 			responseMap.put("state name", stateName);
 			responseMap.put("county name", countyName);
 			responseMap.put("broadband data", data);

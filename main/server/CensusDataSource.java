@@ -28,14 +28,75 @@ import java.util.Map;
  * https://api.census.gov/data/2010/dec/sf1?get=NAME&for=state:*
  */
 public class CensusDataSource {
-
-//  private Map<String, Object> stateCodes;
+    private Map<String, String> stateCodes;
   private List<List<String>> listStateCodes;
   private List<List<String>> countyCodes;
 
+    /**
+     * constructor - fills in the stateCodes HashMap
+     */
+  public CensusDataSource() {
+      List<List<String>> stateCodesList = List.of(List.of("Alabama","01"),
+              List.of("Alaska","02"),
+              List.of("Arizona","04"),
+              List.of("Arkansas","05"),
+              List.of("California","06"),
+              List.of("Louisiana","22"),
+              List.of("Kentucky","21"),
+              List.of("Colorado","08"),
+              List.of("Connecticut","09"),
+              List.of("Delaware","10"),
+              List.of("District of Columbia","11"),
+              List.of("Florida","12"),
+              List.of("Georgia","13"),
+              List.of("Hawaii","15"),
+              List.of("Idaho","16"),
+              List.of("Illinois","17"),
+              List.of("Indiana","18"),
+              List.of("Iowa","19"),
+              List.of("Kansas","20"),
+              List.of("Maine","23"),
+              List.of("Maryland","24"),
+              List.of("Massachusetts","25"),
+              List.of("Michigan","26"),
+              List.of("Minnesota","27"),
+              List.of("Mississippi","28"),
+              List.of("Missouri","29"),
+              List.of("Montana","30"),
+              List.of("Nebraska","31"),
+              List.of("Nevada","32"),
+              List.of("New Hampshire","33"),
+              List.of("New Jersey","34"),
+              List.of("New Mexico","35"),
+              List.of("New York","36"),
+              List.of("North Carolina","37"),
+              List.of("North Dakota","38"),
+              List.of("Ohio","39"),
+              List.of("Oklahoma","40"),
+              List.of("Oregon","41"),
+              List.of("Pennsylvania","42"),
+              List.of("Rhode Island","44"),
+              List.of("South Carolina","45"),
+              List.of("South Dakota","46"),
+              List.of("Tennessee","47"),
+              List.of("Texas","48"),
+              List.of("Utah","49"),
+              List.of("Vermont","50"),
+              List.of("Virginia","51"),
+              List.of("Washington","53"),
+              List.of("West Virginia","54"),
+              List.of("Wisconsin","55"),
+              List.of("Wyoming","56"),
+              List.of("Puerto Rico","72"));
+       this.stateCodes = new HashMap<>();
+        for (List<String> state: stateCodesList) {
+            this.stateCodes.put(state.get(0), state.get(1));
+        }
+//        System.out.println(this.stateCodes);
+  }
 
   public String getData(String stateName, String countyName) throws DatasourceException {
-      String stateCode = this.findStateCode(stateName);
+      String stateCode = this.stateCodes.get(stateName);
       String countyCode = this.findCountyCode(stateCode, countyName);
 
       try {
@@ -62,7 +123,7 @@ public class CensusDataSource {
       }
   }
 
-  /**
+  /*
    * Method to find the stateCode given a state name
    * Will first check if hashmap is null (better way??), if so need
    * to query census
@@ -70,8 +131,10 @@ public class CensusDataSource {
    * Throw all exceptions because we want to handle them in the handler!
    * @return
    */
+        /*
   public String findStateCode(String stateName) throws DatasourceException{
-    System.out.println("find state codes called");
+
+      System.out.println("find state codes called");
     if(this.listStateCodes==null){
       try{
         this.requestStateCodes();
@@ -90,11 +153,13 @@ public class CensusDataSource {
       }
       throw new DatasourceException("State name was not found!");
     }
-    /**TODO: figure out a better way to do this, rn all exception caught here?*/
+    TODO: figure out a better way to do this, rn all exception caught here?
     catch(Exception e){
       throw new DatasourceException(e.getMessage());
     }
+
   }
+    */
 
     /**
      * Method to find the countyCode given a county name
@@ -166,6 +231,7 @@ public class CensusDataSource {
    * @throws IOException
    * @throws InterruptedException
    */
+  /*
   private void requestStateCodes() throws IOException, DatasourceException {
       System.out.println("request state codes called");
       //builds request to census for state code data
@@ -205,6 +271,7 @@ public class CensusDataSource {
 //      this.stateCodes = body;
 //    }
     }
+   */
 
   /**
    * Private helper method; throws IOException so different callers
