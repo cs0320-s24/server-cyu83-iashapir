@@ -7,6 +7,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import javax.swing.plaf.nimbus.State;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,9 +21,9 @@ import java.util.Map;
  */
 public class BroadbandHandler implements Route {
 
-	private final CensusDataSource state;
+	private final DataSource state;
 
-	public BroadbandHandler(CensusDataSource state){
+	public BroadbandHandler(DataSource state){
 		this.state = state;
 	}
 	@Override
@@ -41,7 +42,8 @@ public class BroadbandHandler implements Route {
 		try{
 //			String stateCode = state.findStateCode(stateName);
 //			String countyCode = state.findCountyCode(stateCode, countyName);
-			String data = state.getData(stateName, countyName);
+			//String data = state.getData(new StateAndCounty(stateName, countyName));
+			String data = state.getData(new StateAndCounty(stateName, countyName));
 			responseMap.put("result", "success");
 //			responseMap.put("stateCode", stateCode);
 //			responseMap.put("countyCode", countyCode);
