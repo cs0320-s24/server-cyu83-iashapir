@@ -17,11 +17,10 @@ public class ViewCSVHandler implements Route {
 	}
 	@Override
 	public Object handle(Request request, Response response) {
-		// TODO: send back the entire CSV file's contents as a Json 2-dimensional array
 		Map<String, Object> responseMap = new HashMap<>();
 
 		if (!this.dataSource.isLoaded()) {
-			responseMap.put("Message","A CSV file is not loaded, please load one before trying to view.");
+			responseMap.put("result","error_no_file_loaded");
 			return new CSVFailureResponse(responseMap).serialize();
 		}
 
