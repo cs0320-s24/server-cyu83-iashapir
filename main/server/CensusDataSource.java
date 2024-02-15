@@ -27,7 +27,7 @@ import java.util.Map;
  *
  * https://api.census.gov/data/2010/dec/sf1?get=NAME&for=state:*
  */
-public class CensusDataSource{ //implements DataSource{
+public class CensusDataSource implements DataSource{
     private Map<String, String> stateCodes;
   private List<List<String>> listStateCodes;
   private List<List<String>> countyCodes;
@@ -97,11 +97,9 @@ public class CensusDataSource{ //implements DataSource{
 
  // @Override
   //public String getData(StateAndCounty sc) throws DatasourceException {
- public String getData(String stateName, String countyName) throws DatasourceException {
-      //String stateCode = this.stateCodes.get(sc.stateName()); //TODO: throw error if stateName not there
-      //String countyCode = this.findCountyCode(stateCode, sc.countyName());
-      String stateCode = this.stateCodes.get(stateName); //TODO: throw error if stateName not there
-      String countyCode = this.findCountyCode(stateCode, countyName);
+ public String getData(StateAndCounty sc) throws DatasourceException {
+      String stateCode = this.stateCodes.get(sc.stateName()); //TODO: throw error if stateName not there
+      String countyCode = this.findCountyCode(stateCode, sc.countyName());
 
       try {
           // build request to get broadband data from census api for given state and county

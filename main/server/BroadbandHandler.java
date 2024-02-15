@@ -21,9 +21,9 @@ import java.util.Map;
  */
 public class BroadbandHandler implements Route {
 
-	private final CensusDataSource state;
+	private final DataSource state;
 
-	public BroadbandHandler(CensusDataSource state){
+	public BroadbandHandler(DataSource state){
 		this.state = state;
 	}
 	@Override
@@ -43,7 +43,7 @@ public class BroadbandHandler implements Route {
 //			String stateCode = state.findStateCode(stateName);
 //			String countyCode = state.findCountyCode(stateCode, countyName);
 			//String data = state.getData(new StateAndCounty(stateName, countyName));
-			String data = state.getData(stateName, countyName);
+			String data = state.getData(new StateAndCounty(stateName, countyName));
 			responseMap.put("result", "success");
 //			responseMap.put("stateCode", stateCode);
 //			responseMap.put("countyCode", countyCode);
