@@ -1,10 +1,12 @@
 package csv;
 
+import java.util.Collections;
 import java.util.List;
 
 public class CSVDataSource {
 
   private List<List<String>> dataset;
+  private List<List<String>> public_dataset = null; // proxy with unmodifiable view
   private String filepath;
   private boolean hasHeader;
   private boolean loaded;
@@ -19,7 +21,10 @@ public class CSVDataSource {
    * @return
    */
   public List<List<String>> getDataset(){
-    return this.dataset;
+    if (public_dataset == null) {
+      public_dataset = Collections.unmodifiableList(dataset);
+    }
+    return this.public_dataset;
   }
 
   public void loadFilepath(){
@@ -35,7 +40,7 @@ public class CSVDataSource {
     this.loaded = true;
   }
 
-  public boolean getHasHeader(){
+  public boolean hasHeader(){
     return this.hasHeader;
   }
   public boolean isLoaded() {

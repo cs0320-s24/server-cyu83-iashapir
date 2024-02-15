@@ -23,7 +23,7 @@ public class Searcher {
     // instantiate regardless of header presence in case user puts in bad input (col name when not
     // there)
     this.colsToIndex = new HashMap<>();
-    this.hasHeader = dataSource.getHasHeader();
+    this.hasHeader = dataSource.hasHeader();
     System.out.println("searcher hasHeader " + this.hasHeader);
     if (this.hasHeader) {
       this.headerCol = dataSource.getHeaderCol();

@@ -32,10 +32,9 @@ public class SearchCSVHandler implements Route {
 		Map<String, Object> responseMap = new HashMap<>();
 
 		if (!this.dataSource.isLoaded()) {
-			responseMap.put("Message","A CSV file is not loaded, please load one before trying to search.");
+			responseMap.put("result","error_no_file_loaded");
 			return new CSVFailureResponse(responseMap).serialize();
 		}
-		System.out.println("entered handle, checked datasource loaded");
 
 		String searchTerm = request.queryParams("searchTerm");
 		String column = request.queryParams("column");
@@ -43,28 +42,24 @@ public class SearchCSVHandler implements Route {
 		responseMap.put("searchTerm",searchTerm);
 		responseMap.put("column", column);
 		responseMap.put("colIsString",colIsString);
-		System.out.println("put query params in responseMap");
-		System.out.println(responseMap);
 
-		if(searchTerm==null){
-			responseMap.put("Message", "searchTerm not specified.");
+		if(searchTerm==null){ // search term not specified
+			responseMap.put("result", "error_bad_request");
 			return new CSVFailureResponse(responseMap).serialize();
 		}
-		System.out.println("search term not null");
 
-		//one of two second parameters inputted but not the others
+		// one of two second parameters inputted but not the others
+		// both column name/index and whether column is a String should be specified
 		if((column==null && colIsString!=null) ||
 				(colIsString==null && column!=null)){
-			responseMap.put("Message", "Must specify both column name/index and whether column is a String");
+			responseMap.put("result", "error_bad_request");
 			return new CSVFailureResponse(responseMap).serialize();
 		}
-
-		System.out.println("got through param checks");
 
 		boolean colName = false;
 		if(colIsString!=null){
-			if (this.checkYesOrNo(colIsString) == 2) {
-				responseMap.put("Message","make sure you enter 'yes' if your column is a name and 'no' if your column is an index");
+			if (this.checkYesOrNo(colIsString) == 2) { // should be "yes" or "no"
+				responseMap.put("result", "error_bad_request");
 				return new CSVFailureResponse(responseMap).serialize();
 
 			} else if (this.checkYesOrNo(colIsString) == 1) {
@@ -72,21 +67,16 @@ public class SearchCSVHandler implements Route {
 			}
 		}
 
-		System.out.println("right before searching");
-
 		Searcher searcher = new Searcher(this.dataSource);
-		System.out.println("created searcher");
 		List<List<String>> results = new ArrayList<List<String>>();
 
 		if(column==null && colIsString==null){
-			System.out.println("entered search if statement");
 			try {
 				results = searcher.search(searchTerm);
-				System.out.println("got results");
-				System.out.println(results);
 			}
 			catch(IllegalArgumentException e){
-				System.out.println(e);
+				responseMap.put("result", "error_bad_request");
+				return new CSVFailureResponse(responseMap).serialize();
 			}
 
 		}
@@ -95,7 +85,8 @@ public class SearchCSVHandler implements Route {
 				results = searcher.search(searchTerm, column, colName);
 			}
 			catch(IllegalArgumentException e){
-				System.out.println(e);
+				responseMap.put("result", "error_bad_request");
+				return new CSVFailureResponse(responseMap).serialize();
 			}
 		}
 		responseMap.put("Search Results",results);
