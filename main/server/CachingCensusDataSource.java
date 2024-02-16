@@ -42,7 +42,6 @@ public class CachingCensusDataSource implements DataSource{
   }
 
   /**
-   * TODO : TRY WRAPPING ILLEGAL ARGUMENT EXCEPTION INTO UNCHECKED EXCEPTION
    * (or change the fact that we're throwing illegaalArgExcpetions and make them something else!)
    * @param sc
    * @return
