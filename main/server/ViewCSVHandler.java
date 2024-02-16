@@ -21,6 +21,7 @@ public class ViewCSVHandler implements Route {
 
 		if (!this.dataSource.isLoaded()) {
 			responseMap.put("result","error_no_file_loaded");
+			responseMap.put("Message","Please load a CSV before searching.");
 			return new CSVFailureResponse(responseMap).serialize();
 		}
 
