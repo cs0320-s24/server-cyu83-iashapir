@@ -40,8 +40,9 @@ public class LoadCSVHandler implements Route {
 		String hasHeader = request.queryParams("hasHeader");
 		Map<String, Object> responseMap = new HashMap<>();
 
-		if (this.checkYesOrNo(hasHeader) == 2) { // user should input "yes" or "no" for hasHeader
+		if (this.checkYesOrNo(hasHeader) == 2) {
 			responseMap.put("result","error_bad_request");
+			responseMap.put("Message","Expected 'yes' or 'no' for hasHeader parameter.");
 			return new CSVFailureResponse(responseMap).serialize();
 
 		} else if (this.checkYesOrNo(hasHeader) == 1) {
@@ -52,7 +53,8 @@ public class LoadCSVHandler implements Route {
 
 		//check filepath
 		if (filepath.contains("..")) {
-			responseMap.put("result", "error_no_file_access_permission");
+			responseMap.put("result", "error_no_file_permissions");
+			responseMap.put("Message","You don't have access to this file!");
 			return new CSVFailureResponse(responseMap).serialize();
 		}
 

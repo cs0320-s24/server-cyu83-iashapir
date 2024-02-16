@@ -33,6 +33,7 @@ public class SearchCSVHandler implements Route {
 
 		if (!this.dataSource.isLoaded()) {
 			responseMap.put("result","error_no_file_loaded");
+			responseMap.put("Message","Please load a CSV before searching.");
 			return new CSVFailureResponse(responseMap).serialize();
 		}
 
@@ -45,6 +46,7 @@ public class SearchCSVHandler implements Route {
 
 		if(searchTerm==null){ // search term not specified
 			responseMap.put("result", "error_bad_request");
+			responseMap.put("Message","Please specify a search term!");
 			return new CSVFailureResponse(responseMap).serialize();
 		}
 
@@ -53,6 +55,8 @@ public class SearchCSVHandler implements Route {
 		if((column==null && colIsString!=null) ||
 				(colIsString==null && column!=null)){
 			responseMap.put("result", "error_bad_request");
+			responseMap.put("Message","Both column specifier (column) and if column"
+					+ " is a string (colIsString) parameters should be specified.");
 			return new CSVFailureResponse(responseMap).serialize();
 		}
 
@@ -60,6 +64,7 @@ public class SearchCSVHandler implements Route {
 		if(colIsString!=null){
 			if (this.checkYesOrNo(colIsString) == 2) { // should be "yes" or "no"
 				responseMap.put("result", "error_bad_request");
+				responseMap.put("Message","Expected 'yes' or 'no' for colIsString parameter.");
 				return new CSVFailureResponse(responseMap).serialize();
 
 			} else if (this.checkYesOrNo(colIsString) == 1) {
@@ -76,6 +81,7 @@ public class SearchCSVHandler implements Route {
 			}
 			catch(IllegalArgumentException e){
 				responseMap.put("result", "error_bad_request");
+				responseMap.put("Message", e.getMessage());
 				return new CSVFailureResponse(responseMap).serialize();
 			}
 
@@ -86,6 +92,7 @@ public class SearchCSVHandler implements Route {
 			}
 			catch(IllegalArgumentException e){
 				responseMap.put("result", "error_bad_request");
+				responseMap.put("Message", e.getMessage());
 				return new CSVFailureResponse(responseMap).serialize();
 			}
 		}
