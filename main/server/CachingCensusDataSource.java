@@ -1,6 +1,7 @@
 package server;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
+import com.google.common.cache.CacheStats;
 import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 
@@ -14,10 +15,10 @@ import java.util.Collection;
  * User specifies number of minutes things should be in the cache
  */
 public class CachingCensusDataSource implements DataSource{
-  private CensusDataSource censusDataSource;
+  private DataSource censusDataSource;
   private LoadingCache<StateAndCounty, String> cache;
 
-  public CachingCensusDataSource(CensusDataSource censusDataSource, int durationMinutes, int cacheEntries) {
+  public CachingCensusDataSource(DataSource censusDataSource, int durationMinutes, int cacheEntries) {
     this.censusDataSource = censusDataSource;
 
     this.cache = CacheBuilder.newBuilder()
@@ -65,7 +66,13 @@ public class CachingCensusDataSource implements DataSource{
         }
         throw new DatasourceException(e.getMessage());
       }
-
   }
+
+
+  /**ONLY USE FOR TESTING**/
+  public CacheStats getStats(){
+    return this.cache.stats();
+  }
+
 
 }

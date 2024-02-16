@@ -99,7 +99,7 @@ public class CensusDataSource implements DataSource{
  public String getData(StateAndCounty sc) throws DatasourceException, IllegalArgumentException{
 
       if(!(this.stateCodes.containsKey(sc.stateName()))){
-        throw new IllegalArgumentException("State " + sc.stateName() + " not valid.");
+        throw new IllegalArgumentException("State: '" + sc.stateName() + "' not valid.");
       }
       //get state code from our internally stored hashmap
       String stateCode = this.stateCodes.get(sc.stateName());
@@ -153,7 +153,7 @@ public class CensusDataSource implements DataSource{
         }
 
         //got through counties and didn't find the one that was inputted
-        throw new IllegalArgumentException("County: " + countyName + " not valid.");
+        throw new IllegalArgumentException("County: '" + countyName + "' not valid.");
     }
 
     /**
