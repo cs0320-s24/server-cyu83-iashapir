@@ -1,4 +1,4 @@
-package server;
+package censusAPI;
 
 /**
  * This exception communicates that something went wrong with
