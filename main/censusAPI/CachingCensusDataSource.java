@@ -7,12 +7,20 @@ import com.google.common.cache.LoadingCache;
 import java.util.concurrent.TimeUnit;
 
 /**
- * User specifies number of minutes things should be in the cache
+ * CachingCensusDataSource
+ * - wraps censusDataSource with caching functionality
+ * - User inputs duration and cache entry max
  */
 public class CachingCensusDataSource implements DataSource {
   private DataSource censusDataSource;
   private LoadingCache<StateAndCounty, String> cache;
 
+  /**
+   * Setup cache
+   * @param censusDataSource --supplies census searching functionality
+   * @param durationMinutes --entered by developer
+   * @param cacheEntries --entered by developer
+   */
   public CachingCensusDataSource(DataSource censusDataSource, int durationMinutes, int cacheEntries) {
     this.censusDataSource = censusDataSource;
 
@@ -37,9 +45,9 @@ public class CachingCensusDataSource implements DataSource {
   }
 
   /**
-   * (or change the fact that we're throwing illegaalArgExcpetions and make them something else!)
-   * @param sc
-   * @return
+   * Checks cache to see if sc is there, if not calls censusDataSource's getData method
+   * @param sc -- state and county to query
+   * @return -- either
    * @throws DatasourceException
    * @throws IllegalArgumentException
    */
