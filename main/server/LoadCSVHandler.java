@@ -40,6 +40,12 @@ public class LoadCSVHandler implements Route {
 		String hasHeader = request.queryParams("hasHeader");
 		Map<String, Object> responseMap = new HashMap<>();
 
+		if (filepath.equals("data/") || hasHeader == null) {
+			responseMap.put("result","error_bad_request");
+			responseMap.put("Message","Please input filepath and hasHeader params.");
+			return new CSVFailureResponse(responseMap).serialize();
+		}
+
 		if (this.checkYesOrNo(hasHeader) == 2) {
 			responseMap.put("result","error_bad_request");
 			responseMap.put("Message","Expected 'yes' or 'no' for hasHeader parameter.");
