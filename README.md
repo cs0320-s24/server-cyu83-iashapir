@@ -37,7 +37,7 @@ Query Parameters:
     Project Name: Gwenyth
     Team members: Catherine Yu (cyu83) and Isabelle Shapiro (iashapir)
     Total time estimated: 12 hours
-    PROJECT REPO: [INSERT LINK HERE]
+    PROJECT REPO: https://github.com/cs0320-s24/server-cyu83-iashapir
 
 # Design Choices
     CSV:
