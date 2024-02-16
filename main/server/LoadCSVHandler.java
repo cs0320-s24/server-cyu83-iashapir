@@ -20,7 +20,6 @@ import java.util.Map;
  */
 public class LoadCSVHandler implements Route {
 	private final CSVDataSource dataSource;
-	private boolean hasHeader;
 
 	/**
 	 * constructor for a loadcsvhandler

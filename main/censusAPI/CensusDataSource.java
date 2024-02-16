@@ -15,18 +15,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/***
- * https://api.census.gov/data/2021/acs/acs1/subject/variables?get=NAME,S2802_C03_022E&
- *
- * https://api.census.gov/data/2010/dec/sf1?get=NAME&for=state:*
+
+/**
+ * CensusDataSource
+ * This class is what communicates with the Census API
+ * (contains ALL functionality used to communicate with ACS in this project)
+ * Stores state codes in internal hashmap as instance variable
+ * "Caches" county codes in case the same state is queried on the next query
+ * Retrieves broadband information per user requests
  */
 public class CensusDataSource implements DataSource {
-    private Map<String, String> stateCodes;
-  private List<List<String>> listStateCodes;
+  private Map<String, String> stateCodes;
   private List<List<String>> countyCodes;
 
     /**
      * constructor - fills in the stateCodes HashMap
+     * We store this as a hashmap so that we don't have to query the census for it
+     * since we will need it every time we use this class
      */
   public CensusDataSource() {
       List<List<String>> stateCodesList = List.of(List.of("Alabama","01"),
@@ -87,8 +92,19 @@ public class CensusDataSource implements DataSource {
         }
   }
 
- // @Override
-  //public String getData(StateAndCounty sc) throws DatasourceException {
+
+  /**
+   * getData method that goes through the following steps to get broadband information related
+   * to inputted StateAndCounty
+   *  1. Use our internal hashmap to search for state and get its code
+   *  2. Use that state code to query the census and retrieve the county code for user's inputted county
+   *  3. Use the state and county codes retrieved to get the broadband data on specified county
+   *
+   * @param sc --StateAndCounty object that contains the State and County to search for
+   * @return
+   * @throws DatasourceException
+   * @throws IllegalArgumentException if either the state or county entered had a typo or does not exist in census data
+   */
  public String getData(StateAndCounty sc) throws DatasourceException, IllegalArgumentException{
 
       if(!(this.stateCodes.containsKey(sc.stateName()))){

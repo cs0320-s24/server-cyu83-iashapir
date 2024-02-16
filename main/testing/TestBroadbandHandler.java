@@ -196,7 +196,7 @@ public class TestBroadbandHandler {
   }
 
   /**
-   * Test that the cache is functioning properly
+   * Test that the cache Integration functioning properly
    * @throws IOException
    */
   @Test
@@ -243,8 +243,6 @@ public class TestBroadbandHandler {
     //test expected values for ENTRY 3
     assertEquals("success", responseBody.get("result"));
     assertEquals("fakeResult", responseBody.get("broadband data"));
-    stats = cachingSource.getStats();
-    //assertTrue(stats.hitCount()==1);
 
     loadConnection.disconnect();
   }
