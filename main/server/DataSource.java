@@ -1,5 +1,5 @@
 package server;
 
 public interface DataSource {
-  String getData(StateAndCounty stateAndCounty) throws DatasourceException;
+  String getData(StateAndCounty stateAndCounty) throws DatasourceException, IllegalArgumentException;
 }

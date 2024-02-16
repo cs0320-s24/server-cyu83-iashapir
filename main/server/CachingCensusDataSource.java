@@ -2,8 +2,11 @@ package server;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.util.concurrent.UncheckedExecutionException;
 
+import javax.xml.crypto.Data;
 import java.util.Collection;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.Collection;
 
@@ -29,21 +32,40 @@ public class CachingCensusDataSource implements DataSource{
             // it's asked for something it doesn't have?
             new CacheLoader<>() {
               @Override //load() computes or retrieves the value corresponding to key.
-              public String load(StateAndCounty stateAndCounty) throws DatasourceException{ //TODO: examine whether we want to be doing this here
+              public String load(StateAndCounty stateAndCounty) throws DatasourceException{
                 System.out.println("called load for: "+ stateAndCounty.stateName() + " "  + stateAndCounty.countyName());
                 // If this isn't yet present in the cache, load it:
-                return censusDataSource.getData(stateAndCounty);
+                  return censusDataSource.getData(stateAndCounty);
               }
             });
   }
 
+  /**
+   * TODO : TRY WRAPPING ILLEGAL ARGUMENT EXCEPTION INTO UNCHECKED EXCEPTION
+   * (or change the fact that we're throwing illegaalArgExcpetions and make them something else!)
+   * @param sc
+   * @return
+   * @throws DatasourceException
+   * @throws IllegalArgumentException
+   */
   @Override
-  public String getData(StateAndCounty sc) throws DatasourceException {
+  public String getData(StateAndCounty sc) throws DatasourceException, IllegalArgumentException{
     // "get" is designed for concurrent situations; for today, use getUnchecked:
-    String result = cache.getUnchecked(sc);
-    // For debugging and demo (would remove in a "real" version):
-    System.out.println(cache.stats());
-    return result;
+      try {
+        String result = cache.get(sc);
+        System.out.println(cache.stats());
+        return result;
+      }
+      /**sadly this is the only way we found to make sure exceptions throws in datasource's
+       * getData method actually make their way to the handler class, otherwise our server would
+       * crash*/
+      catch(Exception e){
+        if(e.getClass()==IllegalArgumentException.class){
+          throw new IllegalArgumentException(e.getMessage());
+        }
+        throw new DatasourceException(e.getMessage());
+      }
+
   }
 
 }
