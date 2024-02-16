@@ -15,23 +15,28 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-
+/**
+ * handler class for loading csv endpoint
+ */
 public class LoadCSVHandler implements Route {
 	private final CSVDataSource dataSource;
 	private boolean hasHeader;
 
+	/**
+	 * constructor for a loadcsvhandler
+	 * @param dataSource - the datasource, which holds information about current
+	 *                      state of the data loaded
+	 */
 	public LoadCSVHandler(CSVDataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 
 	/**
-	 * Query params:
-	 * filepath
-	 * contains headers = 'hasHeader'
-	 *
-	 * @param request
-	 * @param response
-	 * @return
+	 * checks to make sure valid parameters were inputted. if so, parses the given
+	 * csv file and stores the information in datasource.
+	 * @param request the request to handle
+	 * @param response use to modify properties of the response
+	 * @return response content
 	 */
 	@Override
 	public Object handle(Request request, Response response){
@@ -81,7 +86,12 @@ public class LoadCSVHandler implements Route {
 
 	}
 
-
+	/**
+	 * helper to check if a given input is either "yes" or "no"
+	 * @param yesOrNo
+	 * @return an int - 1 if the input was "yes", 0 if the input was "no", and 2
+	 * if neither
+	 */
 	private int checkYesOrNo(String yesOrNo) {
 		String lowercase = yesOrNo.toLowerCase(Locale.ROOT);
 		switch (lowercase) {

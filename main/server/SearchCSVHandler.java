@@ -14,17 +14,28 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * handler class for searching csv endpoint
+ */
 public class SearchCSVHandler implements Route {
 	private final CSVDataSource dataSource;
+
+	/**
+	 * constructor for a searchCsvHandler
+	 * @param dataSource - the datasource, which holds information about current
+	 * 	                    state of the data loaded
+	 */
 	public SearchCSVHandler(CSVDataSource dataSource){
 		this.dataSource = dataSource;
 	}
 
 	/**
-	 * searchTerm,column,columnType (yes if string)
-	 * @param request
-	 * @param response
-	 * @return
+	 * checks that the required input is given in correct form. if so, searches
+	 * through the dataset using the given params
+	 * @param request the request to handle
+	 * @param response use to modify properties of the response
+	 * @return response content
+	 * @throws IllegalArgumentException thrown by Search
 	 */
 	@Override
 	public Object handle(Request request, Response response) throws IllegalArgumentException{
@@ -101,6 +112,12 @@ public class SearchCSVHandler implements Route {
 
 	}
 
+	/**
+	 * helper to check if a given input is either "yes" or "no"
+	 * @param yesOrNo
+	 * @return an int - 1 if the input was "yes", 0 if the input was "no", and 2
+	 * if neither
+	 */
 	private int checkYesOrNo(String yesOrNo) {
 		String lowercase = yesOrNo.toLowerCase(Locale.ROOT);
 		switch (lowercase) {

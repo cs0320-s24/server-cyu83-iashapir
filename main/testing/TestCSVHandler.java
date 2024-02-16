@@ -24,9 +24,13 @@ import java.util.logging.Logger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static spark.Spark.after;
 
+/**
+ * tests for all the CSV handlers (loading, searching, viewing)
+ */
 public class TestCSVHandler {
 	private final Type mapStringObject = Types.newParameterizedType(Map.class, String.class, Object.class);
 	private JsonAdapter<Map<String, Object>> adapter;
+
 	@BeforeAll
 	public static void setup_before_everything() {
 		Spark.port(3232); // Set the Spark port number
@@ -34,6 +38,7 @@ public class TestCSVHandler {
 		//   (assuming using JDK, not Log4J)
 		Logger.getLogger("").setLevel(Level.WARNING); // empty name = root logger
 	}
+
 	@BeforeEach
 	public void setup() {
 		CSVDataSource csvDatasource = new CSVDataSource();
@@ -58,6 +63,10 @@ public class TestCSVHandler {
 		Spark.awaitStop(); // don't proceed until the server is stopped
 	}
 
+	/**
+	 * tests that loadcsv and searchcsv return errors because no parameters were given
+	 * @throws IOException
+	 */
 	@Test
 	public void testNoParamsError() throws IOException {
 		// check that server does not crash even when no params are given
@@ -77,6 +86,10 @@ public class TestCSVHandler {
 		searchConnection.disconnect();
 	}
 
+	/**
+	 * tests the abiilty to view and search before vs after loading a file
+	 * @throws IOException
+	 */
 	@Test
 	public void testBeforeAfterLoading() throws IOException {
 		// check that server does not crash even when no params are given
@@ -114,6 +127,11 @@ public class TestCSVHandler {
 		searchConnection.disconnect();
 	}
 
+	/**
+	 * tests different cases for invalid inputs to search, they should all have
+	 * an error response type
+	 * @throws IOException
+	 */
 	@Test
 	public void testInvalidSearchInput() throws IOException {
 		// now load a csv to view
@@ -151,6 +169,11 @@ public class TestCSVHandler {
 		searchConnection.disconnect();
 	}
 
+	/**
+	 * tests different cases for invalid input for loading, which should all have
+	 * an error response type
+	 * @throws IOException
+	 */
 	@Test
 	public void testInvalidLoadInput() throws IOException {
 		// file does not exist
