@@ -80,7 +80,7 @@ of what values are queried (if they meet parameter requirements for the CensusDa
 
 # Tests
 
-    CSV:
+    CSV Integration Tests:
 Our TestCSVHandler file contains tests with the following descriptions:
 - We test that an error response occurs if the user attempts to view or search a csv
 before loading a file.
@@ -95,7 +95,7 @@ result in an error response.
 as our response records contained internal response maps that we were unable to access the contents of without casting.
 
 
-    Broadband:
+    Broadband Integration Tests:
 Our TestBroadbandHandler file contains tests with the following descriptions:
 - We use our MockedCensusDataSource to test that we get success responses from our API
 if proper query parameters are entered
@@ -104,9 +104,15 @@ an error response from our API
 - We use our CensusDataSource and very few calls to the real census API to 
 ensure that our error handling is working properly
   - We expect error responses when inputting invalid states and counties
+- We use our CachingCensusDataSource to test that integration with that handler works
+properly as well.
+
+
+    Caching Unit Tests:
+
 - We use our CachingCensusDataSource wrapped around our MockCensusDataSource
-test that our cache works properly by tracking hits and misses in the cache
-and ensuring success for all valid queries
+test that our cache works properly by tracking hits and misses in the cache and
+ensuring that our cache performs properly when we reach the entry limit (kicks out oldest entry)
 
 
 # Errors/Bugs
