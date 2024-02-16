@@ -9,6 +9,7 @@ import spark.Route;
 
 import javax.swing.plaf.nimbus.State;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,26 +40,41 @@ public class BroadbandHandler implements Route {
 		String stateName = request.queryParams("state");
 		String countyName = request.queryParams("county");
 
+		if(stateName==null || countyName==null){
+			responseMap.put("state name", stateName);
+			responseMap.put("county name", countyName);
+			responseMap.put("result", "error");
+			responseMap.put("error_type", "missing_parameter");
+			responseMap.put("error_arg", stateName == null ? "state" : "county");
+			return adapter.toJson(responseMap);
+		}
+
+		Date currentDate = new Date();
+
 		try{
-//			String stateCode = state.findStateCode(stateName);
-//			String countyCode = state.findCountyCode(stateCode, countyName);
-			//String data = state.getData(new StateAndCounty(stateName, countyName));
 			String data = state.getData(new StateAndCounty(stateName, countyName));
 			responseMap.put("result", "success");
-//			responseMap.put("stateCode", stateCode);
-//			responseMap.put("countyCode", countyCode);
 			responseMap.put("state name", stateName);
 			responseMap.put("county name", countyName);
 			responseMap.put("broadband data", data);
+			responseMap.put("census queried at", currentDate.toString());
 			return adapter.toJson(responseMap);
 		}
 		catch(DatasourceException e){
-			responseMap.put("type", "error");
-			responseMap.put("result", e.getMessage());
+			responseMap.put("result", "error");
+			responseMap.put("type", e.getMessage());
+			responseMap.put("state name", stateName);
+			responseMap.put("county name", countyName);
+			responseMap.put("census queried at", currentDate.toString());
 			return adapter.toJson(responseMap);
 		}
-//		catch (IllegalArgumentException e) {
-//
-//		}
+		catch(IllegalArgumentException e){
+			responseMap.put("result", "error");
+			responseMap.put("type", e.getMessage());
+			responseMap.put("state name", stateName);
+			responseMap.put("county name", countyName);
+			responseMap.put("census queried at", currentDate.toString());
+			return adapter.toJson(responseMap);
+		}
 	}
 }

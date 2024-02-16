@@ -14,7 +14,7 @@ public class MockedCensusDataSource implements DataSource {
 
 
   @Override
-  public String getData(StateAndCounty sc) throws DatasourceException{
+  public String getData(StateAndCounty sc) throws DatasourceException, IllegalArgumentException{
     return constantData;
   }
 }
