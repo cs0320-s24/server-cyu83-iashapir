@@ -114,6 +114,12 @@ properly as well.
 test that our cache works properly by tracking hits and misses in the cache and
 ensuring that our cache performs properly when we reach the entry limit (kicks out oldest entry)
 
+  
+    Census Data Soruce Unit Tests:
+
+- We instantiated a CensusDataSource object to test that querying the census API for valid state
+and county combinations would result in the correct numbers from the Census's broadband data. This 
+ensures that our actual communications with the Census API are accurate.
 
 # Errors/Bugs
 

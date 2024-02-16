@@ -16,19 +16,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * API Key: 21456f9080396380fefd692adedb749df756600c
- * https://api.census.gov/data/2021/acs/acs1/subject/variables?get=NAME,S2802_C03_022E&
- * for=county:COUNTY_CODE&in=state:STATE_CODE (* is all)
- *
- * the job of this class is just to get the data, not actually run queries
+ * Uses handle method to run queries using the passed in DataSource's getData method
+ * Checks parameters for validity before calling getData
  */
 public class BroadbandHandler implements Route {
 
-	private final DataSource state;
+	private final DataSource state; //utilize polymorphism here so that our Cache and Mocked Sources can be used by same class
 
 	public BroadbandHandler(DataSource state){
 		this.state = state;
 	}
+
+	/**
+	 * Handle
+	 * this method creates Moshi object and calls our state's method to getData (from whatever source it has)
+	 * returns serialized JSon responses for our API to display
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@Override
 	public Object handle(Request request, Response response) {
 		// Step 1: Prepare to send a reply of some sort
@@ -42,6 +48,7 @@ public class BroadbandHandler implements Route {
 		String stateName = request.queryParams("state");
 		String countyName = request.queryParams("county");
 
+		//Check bad parameter input and display helpful error messages
 		if(stateName==null || countyName==null){
 			responseMap.put("state name", stateName);
 			responseMap.put("county name", countyName);
@@ -51,9 +58,11 @@ public class BroadbandHandler implements Route {
 			return adapter.toJson(responseMap);
 		}
 
+		//get date/time queried
 		Date currentDate = new Date();
 
 		try{
+			//success! put all parameters and broadband information in response map
 			String data = state.getData(new StateAndCounty(stateName, countyName));
 			responseMap.put("result", "success");
 			responseMap.put("state name", stateName);
@@ -62,6 +71,7 @@ public class BroadbandHandler implements Route {
 			responseMap.put("census queried at", currentDate.toString());
 			return adapter.toJson(responseMap);
 		}
+		//Failed due to datasource exception
 		catch(DatasourceException e){
 			responseMap.put("result", "error");
 			responseMap.put("type", e.getMessage());
@@ -70,6 +80,7 @@ public class BroadbandHandler implements Route {
 			responseMap.put("census queried at", currentDate.toString());
 			return adapter.toJson(responseMap);
 		}
+		//Failed due to type/misspelling/misformatting/etc of state or county name
 		catch(IllegalArgumentException e){
 			responseMap.put("result", "error");
 			responseMap.put("type", e.getMessage());

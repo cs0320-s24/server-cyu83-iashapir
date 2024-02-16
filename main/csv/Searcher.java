@@ -17,6 +17,12 @@ public class Searcher {
   private Boolean hasHeader;
   private HashSet<Integer> rowMatchInts;
 
+  /**
+   * Searcher constructor:
+   * - sets instance variables like our parsed dataset
+   * - if header present in data, populates column-to-index hashmap that is used to search by column
+   * @param dataSource --takes in shared state CSVDataSource to access parsed data and header col
+   */
   public Searcher(CSVDataSource dataSource) {
     this.dataset = dataSource.getDataset();
     System.out.println("datasource set");
@@ -102,8 +108,10 @@ public class Searcher {
     return this.returnRows();
   }
 
-
-
+  /**
+   * Get the rows that matched from our search to return
+   * @return
+   */
   private List<List<String>> returnRows() {
     if (this.rowMatchInts.isEmpty()) {
       return new ArrayList<List<String>>();
@@ -116,23 +124,10 @@ public class Searcher {
     }
   }
 
-  /**
-   * FOR TESTING PURPOSES ONLY returns a List<List<String>> corresponding to the searchTerm matches
-   */
-  public List<List<String>> getRowMatches() {
-    List<List<String>> rowMatches = new ArrayList<List<String>>();
-    if (this.rowMatchInts != null) {
-      for (int row : this.rowMatchInts) {
-        rowMatches.add(this.dataset.get(row));
-      }
-    }
-    return rowMatches;
-  }
 
   /**
    * Uses the header column parsed in CSVParser to populate our Col Name: Col Index hashmap This
    * function is only called if the CSV has a Header row
-   * //TODO: ask about how to handle error messages printed in csv (like duplicate columns)
    */
   private void populateColToIndex() {
 

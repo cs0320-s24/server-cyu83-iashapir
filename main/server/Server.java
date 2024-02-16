@@ -6,7 +6,11 @@ import censusAPI.CensusDataSource;
 import csv.CSVDataSource;
 import spark.Spark;
 
-
+/**
+ * Server
+ * Starts listening from port and prepares to run "get" requests via our API
+ * Sets up all 4 of our endpoints with the proper handlers
+ */
 public class Server {
 
 	public static void main(String[] args) {
@@ -31,6 +35,7 @@ public class Server {
 		Spark.init();
 		Spark.awaitInitialization();
 
+		//Message to print when server starts runnning
 		System.out.println("Server started at http://localhost:" + port);
 		System.out.println("Endpoints: loadcsv, viewcsv, searchcsv, broadband");
 		System.out.println("Do not use viewcsv or searchcsv without first loading a csv file via the loadcsv endpoint.");
