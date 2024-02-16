@@ -1,23 +1,16 @@
-package server;
+package censusAPI;
 
-import com.squareup.moshi.Json;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
 import okio.Buffer;
-import org.eclipse.jetty.util.IO;
-import javax.xml.crypto.Data;
+
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +20,7 @@ import java.util.Map;
  *
  * https://api.census.gov/data/2010/dec/sf1?get=NAME&for=state:*
  */
-public class CensusDataSource implements DataSource{
+public class CensusDataSource implements DataSource {
     private Map<String, String> stateCodes;
   private List<List<String>> listStateCodes;
   private List<List<String>> countyCodes;

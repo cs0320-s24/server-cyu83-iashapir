@@ -1,20 +1,15 @@
-package server;
+package censusAPI;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.CacheStats;
 import com.google.common.cache.LoadingCache;
-import com.google.common.util.concurrent.UncheckedExecutionException;
 
-import javax.xml.crypto.Data;
-import java.util.Collection;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.Collection;
 
 /**
  * User specifies number of minutes things should be in the cache
  */
-public class CachingCensusDataSource implements DataSource{
+public class CachingCensusDataSource implements DataSource {
   private DataSource censusDataSource;
   private LoadingCache<StateAndCounty, String> cache;
 
@@ -33,7 +28,7 @@ public class CachingCensusDataSource implements DataSource{
             // it's asked for something it doesn't have?
             new CacheLoader<>() {
               @Override //load() computes or retrieves the value corresponding to key.
-              public String load(StateAndCounty stateAndCounty) throws DatasourceException{
+              public String load(StateAndCounty stateAndCounty) throws DatasourceException {
                 System.out.println("called load for: "+ stateAndCounty.stateName() + " "  + stateAndCounty.countyName());
                 // If this isn't yet present in the cache, load it:
                   return censusDataSource.getData(stateAndCounty);

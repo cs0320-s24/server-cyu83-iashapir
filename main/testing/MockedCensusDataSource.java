@@ -1,8 +1,8 @@
 package testing;
 
-import server.DataSource;
-import server.DatasourceException;
-import server.StateAndCounty;
+import censusAPI.DataSource;
+import censusAPI.DatasourceException;
+import censusAPI.StateAndCounty;
 
 public class MockedCensusDataSource implements DataSource {
 

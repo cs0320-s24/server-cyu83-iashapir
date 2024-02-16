@@ -6,24 +6,21 @@ import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
 import org.junit.jupiter.api.Test;
 import server.BroadbandHandler;
-import server.CachingCensusDataSource;
-import server.CensusDataSource;
-import server.DataSource;
+import censusAPI.CachingCensusDataSource;
+import censusAPI.CensusDataSource;
+import censusAPI.DataSource;
 import spark.Spark;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import okio.Buffer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import spark.Spark;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;

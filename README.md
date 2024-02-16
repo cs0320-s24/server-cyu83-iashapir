@@ -7,6 +7,7 @@
 # How To
     Loadcsv:
 Endpoint: 'loadcsv'
+
 Query Parameters:
 - "filepath": this should be the path to your csv file starting from the inside of the data folder (exclude '/data')
 - "hasHeader": should be either "yes" or "no" depending on whether your csv has a header row
@@ -14,13 +15,16 @@ Query Parameters:
 
     Viewcsv:
 Endpoint: 'viewcsv'
-Important note: this can only be used *after* loading a csv via the loadcsv endpoint
+
+**Important note:** this can only be used *after* loading a csv via the loadcsv endpoint
 No query parameters
 
 
     Searchcsv:
 Endpoint: 'searchcsv'
-Important note: this can only be used *after* loading a csv via the loadcsv endpoint
+
+**Important note:** this can only be used *after* loading a csv via the loadcsv endpoint
+
 Query Parameters: 
 - "searchTerm": enter what you would like to search for in your loaded csv
 - "column": (OPTIONAL) enter either a column name or index you want to search in
@@ -29,9 +33,14 @@ Query Parameters:
 
     Broadband:
 Endpoint: 'broadband'
+
 Query Parameters:
-- "state": enter a state from this list with the same formatting: https://api.census.gov/data/2010/dec/sf1?get=NAME&for=state:* 
-- "county": enter a county (must be located in the state you entered)
+- "state": enter a state name from this list with the same formatting:
+https://api.census.gov/data/2010/dec/sf1?get=NAME&for=state:* 
+- "county": enter a county name (must be located in the state you entered)
+
+**Important note:** the ACS data does not contain data for counties with populations
+less than **65,000**, so no results will be found if one such county is inputted. 
 
 # Project Details
     Project Name: Gwenyth
@@ -72,7 +81,19 @@ of what values are queried (if they meet parameter requirements for the CensusDa
 # Tests
 
     CSV:
-Our TestCSVHandler file 
+Our TestCSVHandler file contains tests with the following descriptions:
+- We test that an error response occurs if the user attempts to view or search a csv
+before loading a file.
+- We test that a success response is received if the user attempts to view or (correctly) search
+a csv after it has been loaded.
+- We test that invalid inputs to the 'loadcsv' endpoint (eg non-existent files, unaccessible files,
+not including all necessary params) results in an error response.
+- We test that, given a file is loaded, invalid inputs to the 'searchcsv' endpoint
+  (eg no search term, not including the type of column when column specifier is given)
+result in an error response.
+- For many of these tests, we checked by hand that the response map contained the accurate results,
+as our response records contained internal response maps that we were unable to access the contents of without casting.
+
 
     Broadband:
 Our TestBroadbandHandler file contains tests with the following descriptions:
